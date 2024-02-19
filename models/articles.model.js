@@ -5,6 +5,12 @@ exports.selectArticleById = (article) => {
   return db
     .query(`SELECT * FROM articles WHERE article_id = $1`, articleArray)
     .then((result) => {
-      return result.rows
+      return result.rows;
     });
+};
+
+exports.selectAllArticles = () => {
+  return db.query(`SELECT * FROM articles`).then((result) => {
+    return result.rows;
+  });
 };
