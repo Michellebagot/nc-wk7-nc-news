@@ -1,2 +1,4 @@
 node_modules
 .env.*
+sqlfile.sql
+sql.txt

@@ -11,7 +11,7 @@
   },
   "GET /api/articles": {
     "description": "serves an array of all articles",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "queries": [],
     "exampleResponse": {
       "articles": [
         {
@@ -27,7 +27,7 @@
     }
   },
   "GET /api/articles/:article_id":{
-    "description": "serves an array with the article selected by ID",
+    "description": "serves an object with the article selected by ID",
     "queries": [],
     "exampleResponse":{
       "article" :{
