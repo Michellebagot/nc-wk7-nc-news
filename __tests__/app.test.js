@@ -57,3 +57,40 @@ describe("Task 3 - GET /api", () => {
       });
   });
 });
+
+describe("Task 4 - GET /api/articles/:article_id", () => {
+  test("should return an article object based on the ID passed into it", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then((response) => {
+        const article = response.body.article[0];
+        expect(article).toMatchObject({
+          article_id: expect.any(Number),
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
+        });
+      });
+  });
+  test("should return a status code of 400 if passed an invalid id", () => {
+    return request(app)
+      .get("/api/articles/nonexistantID")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+  test("should return a status code of 404 if passed an valid id that does no exist", () => {
+    return request(app)
+      .get("/api/articles/9999")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Not found");
+      });
+  });
+});
