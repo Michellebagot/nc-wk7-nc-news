@@ -132,10 +132,20 @@ describe("Task 5 - GET /api/articles", () => {
       .expect(200)
       .then((response) => {
         const articles = response.body.articles;
-        console.log(articles);
         expect(articles).toBeSortedBy("created_at", {
           descending: true,
         });
+      });
+  });
+});
+
+describe("Task 6 - GET /api/articles/:article_id/comments", () => {
+  test("should test this function", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        expect(response).toBe("broken on purpose - finished for day");
       });
   });
 });
