@@ -146,6 +146,7 @@ describe("Task 6 - GET /api/articles/:article_id/comments", () => {
       .expect(200)
       .then((response) => {
         const comments = response.body.comments;
+        expect(comments.length).not.toBe(0);
         comments.forEach((comment) => {
           expect(comment).toMatchObject({
             comment_id: expect.any(Number),
@@ -169,12 +170,12 @@ describe("Task 6 - GET /api/articles/:article_id/comments", () => {
         });
       });
   });
-  test("should return a 404 error if no comments exist for the article", () => {
+  test("should return a 200 if no comments exist for the article", () => {
     return request(app)
       .get("/api/articles/10/comments")
-      .expect(404)
+      .expect(200)
       .then((response) => {
-        expect(response.body.msg).toBe("Not found");
+        expect(response.body.comments).toEqual([]);
       });
   });
   test("should return a status code of 400 if passed an invalid id", () => {
@@ -183,6 +184,14 @@ describe("Task 6 - GET /api/articles/:article_id/comments", () => {
       .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Bad request");
+      });
+  });
+  test("should return a status code of 404 if passed an article_id that does not exist", () => {
+    return request(app)
+      .get("/api/articles/75/comments")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Not found");
       });
   });
 });
