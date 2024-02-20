@@ -21,8 +21,8 @@ exports.getCommentsByArticleId = (request, response, next) => {
 };
 
 exports.postComment = (request, response, next) => {
-  const body = request.body.body
-  const username = request.body.username
+  const body = request.body.body;
+  const username = request.body.username;
   if (
     body.length === 0 ||
     username.length === 0 ||
@@ -45,3 +45,5 @@ exports.postComment = (request, response, next) => {
       next(err);
     });
 };
+
+

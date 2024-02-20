@@ -79,7 +79,7 @@ describe("Task 4 - GET /api/articles/:article_id", () => {
   });
   test("should return a status code of 400 if passed an invalid id", () => {
     return request(app)
-      .get("/api/articles/nonexistantID")
+      .get("/api/articles/invaideArticleID")
       .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Bad request");
@@ -180,7 +180,7 @@ describe("Task 6 - GET /api/articles/:article_id/comments", () => {
   });
   test("should return a status code of 400 if passed an invalid id", () => {
     return request(app)
-      .get("/api/articles/nonexistantID/comments")
+      .get("/api/articles/invalidArticleID/comments")
       .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Bad request");
@@ -237,7 +237,7 @@ describe("Task 7 - POST /api/articles/:article_id/comments", () => {
       body: "This is some placeholder text to replicate adding a comment",
     };
     return request(app)
-      .post("/api/articles/nonExistantID/comments")
+      .post("/api/articles/invalidArticleID/comments")
       .send(newComment)
       .expect(400)
       .then((response) => {
@@ -268,6 +268,84 @@ describe("Task 7 - POST /api/articles/:article_id/comments", () => {
       .expect(400)
       .then((response) => {
         expect(response.body.msg).toBe("Bad request");
+      });
+  });
+});
+
+describe("Task 8 - PATCH /api/articles/:article_id", () => {
+  test("should update the votes by adding votes on the selected article", () => {
+    const updateVotes = { inc_votes: 123 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(updateVotes)
+      .expect(200)
+      .then((response) => {
+        const article = response.body.article;
+        expect(article.votes).toEqual(223);
+        expect(article.article_id).toEqual(1);
+      });
+  });
+  test("should update the votes by subtracking negative votes on the selected article", () => {
+    const updateVotes = { inc_votes: -50 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(updateVotes)
+      .expect(200)
+      .then((response) => {
+        const article = response.body.article;
+        expect(article.votes).toEqual(50);
+        expect(article.article_id).toEqual(1);
+      });
+  });
+  test("should return the article with the updated votes when passed a valid request", () => {
+    const updateVotes = { inc_votes: 123 };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(updateVotes)
+      .expect(200)
+      .then((response) => {
+        const article = response.body.article;
+        expect(article).toMatchObject({
+          article_id: expect.any(Number),
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
+        });
+      });
+  });
+  test("should return a 400 status if passed no votes to update", () => {
+    //unsure if this is the right status code
+    const updateVotes = { inc_votes: 0 };
+    return request(app)
+      .patch("/api/articles/2")
+      .send(updateVotes)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+  test("should return a 400 error if the article_id is invalid", () => {
+    const updateVotes = { inc_votes: 123 };
+    return request(app)
+      .patch("/api/articles/invalidArticleID")
+      .send(updateVotes)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+  test("should return a 404 error if the article_id is ", () => {
+    const updateVotes = { inc_votes: 123 };
+    return request(app)
+      .patch("/api/articles/9999")
+      .send(updateVotes)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Not found");
       });
   });
 });

@@ -29,11 +29,25 @@ exports.selectAllArticles = () => {
     });
 };
 
-exports.selectCommentsByArticleId = (article) => {
-  const articleArray = [article.article_id];
+exports.selectCommentsByArticleId = ({ article_id }) => {
+  const articleArray = [article_id];
   return db
     .query(`SELECT * FROM articles WHERE article_id = $1`, articleArray)
     .then((result) => {
       return result.rows;
     });
 };
+
+exports.updateArticle = ({ article_id }, { inc_votes }) => {
+  const articleArray = [article_id, inc_votes];
+  return db
+    .query(
+      `UPDATE articles SET votes = votes + $2 WHERE article_id = $1 RETURNING *;`,
+      articleArray
+    )
+    .then((result) => {
+      return result.rows[0];
+    });
+};
+
+// "UPDATE treasures SET cost_at_auction = $2 WHERE treasure_id = $1 RETURNING cost_at_auction",
