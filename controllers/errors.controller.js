@@ -15,5 +15,7 @@ exports.handleCustomErrors = (err, request, response, next) => {
 };
 
 exports.handle500Errors = (err, request, response, next) => {
-  console.log(err);
+  if (err.status && err.msg) {
+    response.status(err.status).send({ msg: err.msg });
+  }
 };
