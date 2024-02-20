@@ -1,3 +1,4 @@
+const { selectArticleById } = require("../models/articles.model");
 const { selectCommentsByArticleId } = require("../models/comments.model");
 
 exports.getCommentsByArticleId = (request, response, next) => {
