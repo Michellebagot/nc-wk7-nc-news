@@ -244,4 +244,30 @@ describe("Task 7 - POST /api/articles/:article_id/comments", () => {
         expect(response.body.msg).toBe("Bad request");
       });
   });
+  test("should fail to post if the comment body is blank", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+  test("should fail to post if the comment no username is supplied", () => {
+    const newComment = {
+      username: "",
+      body: "This is some placeholder text to replicate adding a comment",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
 });
