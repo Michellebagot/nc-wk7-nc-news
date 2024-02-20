@@ -132,10 +132,57 @@ describe("Task 5 - GET /api/articles", () => {
       .expect(200)
       .then((response) => {
         const articles = response.body.articles;
-        console.log(articles);
         expect(articles).toBeSortedBy("created_at", {
           descending: true,
         });
+      });
+  });
+});
+
+describe("Task 6 - GET /api/articles/:article_id/comments", () => {
+  test("should return an array of objects with the appropriate properties", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        const comments = response.body.comments;
+        comments.forEach((comment) => {
+          expect(comment).toMatchObject({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            article_id: expect.any(Number),
+          });
+        });
+      });
+  });
+  test("should return an array that is sorted by the newest article first", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then((response) => {
+        const comments = response.body.comments;
+        expect(comments).toBeSortedBy("created_at", {
+          descending: true,
+        });
+      });
+  });
+  test("should return a 404 error if no comments exist for the article", () => {
+    return request(app)
+      .get("/api/articles/10/comments")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Not found");
+      });
+  });
+  test("should return a status code of 400 if passed an invalid id", () => {
+    return request(app)
+      .get("/api/articles/nonexistantID/comments")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
       });
   });
 });
