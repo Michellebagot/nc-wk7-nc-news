@@ -7,7 +7,7 @@ const {
   getArticleById,
   getArticles,
 } = require("./controllers/articles.controller");
-const { getCommentsByArticleId } = require("./controllers/comments.controller");
+const { getCommentsByArticleId, postComment } = require("./controllers/comments.controller");
 
 const {
   handle500Errors,
@@ -24,6 +24,10 @@ app.get("/api", getEndpoints);
 app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
+
+//app -POST
+
+app.post("/api/articles/:article_id/comments", postComment)
 
 // Error controllers
 

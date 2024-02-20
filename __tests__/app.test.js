@@ -195,3 +195,53 @@ describe("Task 6 - GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("Task 7 - POST /api/articles/:article_id/comments", () => {
+  test("should add a new comment to an article, returning the comment", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is some placeholder text to replicate adding a comment",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then((response) => {
+        const comment = response.body;
+        expect(comment.comment).toEqual({
+          article_id: expect.any(Number),
+          comment_id: expect.any(Number),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+        });
+      });
+  });
+  test("should fail to post the comment if provided a valid but non existant article ID", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is some placeholder text to replicate adding a comment",
+    };
+    return request(app)
+      .post("/api/articles/1000/comments")
+      .send(newComment)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Not found");
+      });
+  });
+  test("should fail to post the comment if provided with an invalid article ID", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "This is some placeholder text to replicate adding a comment",
+    };
+    return request(app)
+      .post("/api/articles/nonExistantID/comments")
+      .send(newComment)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
+  });
+});
