@@ -350,7 +350,7 @@ describe("Task 8 - PATCH /api/articles/:article_id", () => {
   });
 });
 
-describe("Task 8 - DELETE /api/comments/:comment_id", () => {
+describe("Task 9 - DELETE /api/comments/:comment_id", () => {
   test('should respond with 204 and "no content" when sucessfully deleted a comment', () => {
     return request(app).delete("/api/comments/1").expect(204);
   });
@@ -363,5 +363,42 @@ describe("Task 8 - DELETE /api/comments/:comment_id", () => {
   });
   test("should respond with 404 when passed no id", () => {
     return request(app).delete("/api/comments/").expect(404);
+  });
+});
+
+describe("Task 10 - GET /api/users", () => {
+  test("should return with an array", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        const users = response.body;
+        expect(users).toBeInstanceOf(Array);
+      });
+  });
+  test("should return with an array of users which has a length greater than 0", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        const users = response.body;
+        expect(users.length).not.toBe(0);
+      });
+  });
+  test("should return with an array of users who's objects match the required properties", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        const users = response.body;
+        expect(users.length).not.toBe(0);
+        users.map((user) => {
+          expect(user).toMatchObject({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
+          });
+        });
+      });
   });
 });

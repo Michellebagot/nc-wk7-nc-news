@@ -11,7 +11,7 @@ const {
 const {
   getCommentsByArticleId,
   postComment,
-  deleteCommentByCommentId
+  deleteCommentByCommentId,
 } = require("./controllers/comments.controller");
 
 const {
@@ -19,6 +19,7 @@ const {
   handleCustomErrors,
   handlePSQLErrors,
 } = require("./controllers/errors.controller");
+const { getUsers } = require("./controllers/users.controller");
 
 app.use(express.json());
 
@@ -29,6 +30,7 @@ app.get("/api", getEndpoints);
 app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
+app.get("/api/users", getUsers);
 
 //app -POST
 
@@ -40,7 +42,7 @@ app.patch("/api/articles/:article_id", patchArticle);
 
 //app -DELETE
 
-app.delete("/api/comments/:comment_id", deleteCommentByCommentId)
+app.delete("/api/comments/:comment_id", deleteCommentByCommentId);
 
 // Error controllers
 
