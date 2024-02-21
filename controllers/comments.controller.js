@@ -2,6 +2,8 @@ const { selectArticleById } = require("../models/articles.model");
 const {
   selectCommentsByArticleId,
   insertCommentToArticle,
+  deleteFromComments,
+  selectCommentByCommentId,
 } = require("../models/comments.model");
 
 exports.getCommentsByArticleId = (request, response, next) => {
@@ -46,4 +48,18 @@ exports.postComment = (request, response, next) => {
     });
 };
 
-
+exports.deleteCommentByCommentId = (request, response, next) => {
+  selectCommentByCommentId(request.params)
+    .then((result) => {
+      if (result.length !== 0) {
+        deleteFromComments(request.params).then(() => {
+          response.status(204).send();
+        });
+      } else {
+        return Promise.reject({ status: 404, msg: "Not found" });
+      }
+    })
+    .catch((err) => {
+      next(err);
+    });
+};

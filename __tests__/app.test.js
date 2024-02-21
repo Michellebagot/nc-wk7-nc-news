@@ -349,3 +349,19 @@ describe("Task 8 - PATCH /api/articles/:article_id", () => {
       });
   });
 });
+
+describe("Task 8 - DELETE /api/comments/:comment_id", () => {
+  test('should respond with 204 and "no content" when sucessfully deleted a comment', () => {
+    return request(app).delete("/api/comments/1").expect(204);
+  });
+
+  test("should respond with 400 when passed an invalid ID", () => {
+    return request(app).delete("/api/comments/invalidId").expect(400);
+  });
+  test("should respond with 404 when passed an non existant ID", () => {
+    return request(app).delete("/api/comments/9999").expect(404);
+  });
+  test("should respond with 404 when passed no id", () => {
+    return request(app).delete("/api/comments/").expect(404);
+  });
+});
