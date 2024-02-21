@@ -350,7 +350,7 @@ describe("Task 8 - PATCH /api/articles/:article_id", () => {
   });
 });
 
-describe("Task 8 - DELETE /api/comments/:comment_id", () => {
+describe("Task 9 - DELETE /api/comments/:comment_id", () => {
   test('should respond with 204 and "no content" when sucessfully deleted a comment', () => {
     return request(app).delete("/api/comments/1").expect(204);
   });
@@ -365,3 +365,84 @@ describe("Task 8 - DELETE /api/comments/:comment_id", () => {
     return request(app).delete("/api/comments/").expect(404);
   });
 });
+
+describe("Task 10 - GET /api/users", () => {
+  test("should return with an array", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        const users = response.body;
+        expect(users).toBeInstanceOf(Array);
+      });
+  });
+  test("should return with an array of users which has a length greater than 0", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        const users = response.body;
+        expect(users.length).not.toBe(0);
+      });
+  });
+  test("should return with an array of users who's objects match the required properties", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        const users = response.body;
+        expect(users.length).not.toBe(0);
+        users.map((user) => {
+          expect(user).toMatchObject({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String),
+          });
+        });
+      });
+  });
+});
+
+// CORE: GET /api/users
+// Description
+// Should:
+
+// be available on /api/users.
+// get all users.
+// Responds with:
+
+// an array of objects, each object should have the following properties:
+// username
+// name
+// avatar_url
+// Consider what errors could occur with this endpoint, and make sure to test for them.
+
+// Remember to add a description of this endpoint to your /api endpoint.
+
+// test("should expect a 200 response - a simple starter test", () => {
+//   return request(app).get("/api/topics").expect(200);
+// });
+// test("should expect a response with 3 topics", () => {
+//   return request(app)
+//     .get("/api/topics")
+//     .expect(200)
+//     .then((response) => {
+//       const topics = response.body.topics;
+//       expect(topics.length).toBe(3);
+//     });
+// });
+// test("should expect the response to include slug and description", () => {
+//   return request(app)
+//     .get("/api/topics")
+//     .expect(200)
+//     .then((response) => {
+//       const topics = response.body.topics;
+//       topics.forEach((topic) => {
+//         expect(topic).toMatchObject({
+//           slug: expect.any(String),
+//           description: expect.any(String),
+//         });
+//       });
+//     });
+// });
+// });
