@@ -21,6 +21,16 @@ exports.getCommentsByArticleId = (request, response, next) => {
 };
 
 exports.postComment = (request, response, next) => {
+  const body = request.body.body;
+  const username = request.body.username;
+  if (
+    body.length === 0 ||
+    username.length === 0 ||
+    typeof body !== "string" ||
+    typeof username !== "string"
+  ) {
+    next({ status: 400, msg: "Bad request" });
+  }
   selectArticleById(request.params)
     .then((article) => {
       if (article.length !== 0) {
@@ -35,3 +45,5 @@ exports.postComment = (request, response, next) => {
       next(err);
     });
 };
+
+

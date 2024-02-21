@@ -6,8 +6,12 @@ const { getEndpoints } = require("./controllers/endpoints.controller");
 const {
   getArticleById,
   getArticles,
+  patchArticle,
 } = require("./controllers/articles.controller");
-const { getCommentsByArticleId, postComment } = require("./controllers/comments.controller");
+const {
+  getCommentsByArticleId,
+  postComment,
+} = require("./controllers/comments.controller");
 
 const {
   handle500Errors,
@@ -27,7 +31,11 @@ app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 //app -POST
 
-app.post("/api/articles/:article_id/comments", postComment)
+app.post("/api/articles/:article_id/comments", postComment);
+
+//app -PATCH
+
+app.patch("/api/articles/:article_id", patchArticle);
 
 // Error controllers
 
