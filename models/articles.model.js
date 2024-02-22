@@ -3,36 +3,11 @@ const db = require("../db/connection");
 exports.selectArticleById = (article) => {
   const articleArray = [article.article_id];
   return db
-    .query(`SELECT * FROM articles WHERE article_id = $1`, articleArray)
+    .query(`  SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.body, article_img_url, CAST(COUNT (comments.article_id) AS INT) AS comment_count FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;`, articleArray)
     .then((result) => {
       return result.rows;
     });
 };
-
-// exports.selectAllTreasures = (sortBy = "age", order = "asc", colour) => {
-//   if (
-//     (!["age", "cost_at_auction", "treasure_name"].includes(sortBy) &&
-//       sortBy !== undefined) ||
-//     (!["asc", "desc"].includes(order) && order !== undefined)
-//   ) {
-//     return Promise.reject({ status: 400, msg: "Bad request" });
-//   }
-
-//   let queryValues = [];
-//   let queryString =
-//     "SELECT * FROM treasures JOIN shops ON shops.shop_ID = treasures.shop_ID";
-
-//   if (colour) {
-//     queryValues.push(colour);
-//     queryString += " WHERE colour = $1";
-//   }
-
-//   queryString += ` ORDER BY ${sortBy} ${order}`;
-
-//   return db.query(queryString, queryValues).then((result) => {
-//     return result.rows;
-//   });
-// };
 
 exports.selectAllArticles = (topicQuery) => {
   let queryValues = [];
@@ -72,5 +47,3 @@ exports.updateArticle = ({ article_id }, { inc_votes }) => {
       return result.rows[0];
     });
 };
-
-// "UPDATE treasures SET cost_at_auction = $2 WHERE treasure_id = $1 RETURNING cost_at_auction",
