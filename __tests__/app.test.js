@@ -304,7 +304,7 @@ describe("Task 8 - PATCH /api/articles/:article_id", () => {
         expect(article.article_id).toEqual(1);
       });
   });
-  test("should update the votes by subtracking negative votes on the selected article", () => {
+  test("should update the votes by subtracting negative votes on the selected article", () => {
     const updateVotes = { inc_votes: -50 };
     return request(app)
       .patch("/api/articles/1")
