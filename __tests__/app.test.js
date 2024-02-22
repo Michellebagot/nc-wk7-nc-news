@@ -93,6 +93,25 @@ describe("Task 4 - GET /api/articles/:article_id", () => {
         expect(response.body.msg).toBe("Not found");
       });
   });
+  test('Task 12 - should include comment count', () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then((response) => {
+        const article = response.body.article[0];
+        expect(article).toMatchObject({
+          article_id: expect.any(Number),
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
+          comment_count: expect.any(Number)
+        });
+      });
+  });
 });
 
 describe("Task 5 - GET /api/articles", () => {
@@ -454,3 +473,11 @@ describe("Task 11 - GET /api/articles (topic query)", () => {
       });
   });
 });
+
+
+
+// CORE: GET /api/articles/:article_id (comment_count)
+// Description
+// FEATURE REQUEST An article response object should also now include:
+
+// comment_count, which is the total count of all the comments with this article_id. You should make use of queries to the database in order to achieve this.
