@@ -18,7 +18,8 @@ exports.getArticleById = (request, response, next) => {
 };
 
 exports.getArticles = (request, response, next) => {
-  selectAllArticles()
+  const topicQuery = request.query.topic
+  selectAllArticles(topicQuery)
     .then((articles) => {
       if (articles.length === 0) {
         return Promise.reject({ status: 404, msg: "Not found" });
