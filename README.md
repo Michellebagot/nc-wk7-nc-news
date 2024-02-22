@@ -4,7 +4,7 @@
 
 Northcoders News is a mock project as fulfilment of the Northcoders Software Development Bootcamp - Back End Section. The project has been to create a "reddit" style social network which allows for forum style interaction and contains the back-end coding.
 
-A hosted version of this project can be found at :
+A hosted version of this project can be found at : https://nc-wk7-nc-news.onrender.com/api
 
 ## DEVELOPER INFORMATION
 
