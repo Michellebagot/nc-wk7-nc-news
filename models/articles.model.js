@@ -9,31 +9,6 @@ exports.selectArticleById = (article) => {
     });
 };
 
-// exports.selectAllTreasures = (sortBy = "age", order = "asc", colour) => {
-//   if (
-//     (!["age", "cost_at_auction", "treasure_name"].includes(sortBy) &&
-//       sortBy !== undefined) ||
-//     (!["asc", "desc"].includes(order) && order !== undefined)
-//   ) {
-//     return Promise.reject({ status: 400, msg: "Bad request" });
-//   }
-
-//   let queryValues = [];
-//   let queryString =
-//     "SELECT * FROM treasures JOIN shops ON shops.shop_ID = treasures.shop_ID";
-
-//   if (colour) {
-//     queryValues.push(colour);
-//     queryString += " WHERE colour = $1";
-//   }
-
-//   queryString += ` ORDER BY ${sortBy} ${order}`;
-
-//   return db.query(queryString, queryValues).then((result) => {
-//     return result.rows;
-//   });
-// };
-
 exports.selectAllArticles = (topicQuery) => {
   let queryValues = [];
   let queryString =
@@ -72,5 +47,3 @@ exports.updateArticle = ({ article_id }, { inc_votes }) => {
       return result.rows[0];
     });
 };
-
-// "UPDATE treasures SET cost_at_auction = $2 WHERE treasure_id = $1 RETURNING cost_at_auction",
