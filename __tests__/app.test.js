@@ -599,4 +599,3 @@ describe("Task 18 - PATCH /api/comments/:comment_id", () => {
   });
 });
 
-//API ENDPOINT.JSON
