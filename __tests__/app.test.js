@@ -503,3 +503,52 @@ describe("Task 15 /api/articles - sorting queries ", () => {
     .expect(400)
   })
 });
+
+
+describe('Task 17 - GET /api/users/:username', () => {
+  test('should return a user by their username', () => {
+    return request(app)
+    .get("/api/users/butter_bridge")
+    .expect(200).then((response) => {
+      const user = response.body
+      expect(user).toMatchObject({
+        username: expect.any(String),
+        name: expect.any(String),
+        avatar_url: expect.any(String),
+      });
+    })
+  });
+  test('should return 200 and empty response if the username does not exist', () => {
+    return request(app)
+    .get("/api/users/nonExistantUser")
+    .expect(200).then((response) => {
+      const user = response.body
+      expect(user).toEqual({})
+    })
+  });
+
+});
+
+
+// ADVANCED: GET /api/users/:username
+// Description
+// Should:
+
+// be available on /api/users/:username.
+// return a user by username.
+// Responds with:
+
+// a user object which should have the following properties:
+// username
+// avatar_url
+// name
+// Consider what errors could occur with this endpoint, and make sure to test for them.
+
+// {
+//   username: 'butter_bridge',
+//   name: 'jonny',
+//   avatar_url:
+//     'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg'
+// }
+
+// Remember to add a description of this endpoint to your /api endpoint.
