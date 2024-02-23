@@ -497,34 +497,106 @@ describe("Task 15 /api/articles - sorting queries ", () => {
         });
       });
   });
-  test("should return 400 bad request if given an invalid sort_by column", () => {  //same 
-    return request(app)
-    .get("/api/articles?sort_by=invalid")
-    .expect(400)
-  })
+  test("should return 400 bad request if given an invalid sort_by column", () => {
+    //same
+    return request(app).get("/api/articles?sort_by=invalid").expect(400);
+  });
 });
 
-
-describe('Task 17 - GET /api/users/:username', () => {
-  test('should return a user by their username', () => {
+describe("Task 17 - GET /api/users/:username", () => {
+  test("should return a user by their username", () => {
     return request(app)
-    .get("/api/users/butter_bridge")
-    .expect(200).then((response) => {
-      const user = response.body
-      expect(user).toMatchObject({
-        username: expect.any(String),
-        name: expect.any(String),
-        avatar_url: expect.any(String),
+      .get("/api/users/butter_bridge")
+      .expect(200)
+      .then((response) => {
+        const user = response.body;
+        expect(user).toMatchObject({
+          username: expect.any(String),
+          name: expect.any(String),
+          avatar_url: expect.any(String),
+        });
       });
-    })
   });
-  test('should return 200 and empty response if the username does not exist', () => {
+  test("should return 200 and empty response if the username does not exist", () => {
     return request(app)
-    .get("/api/users/nonExistantUser")
-    .expect(200).then((response) => {
-      const user = response.body
-      expect(user).toEqual({})
-    })
+      .get("/api/users/nonExistantUser")
+      .expect(200)
+      .then((response) => {
+        const user = response.body;
+        expect(user).toEqual({});
+      });
+  });
+});
+
+describe("Task 18 - PATCH /api/comments/:comment_id", () => {
+  test("should update the votes, positively on the comment from the supplied comment id", () => {
+    const updateVotes = { inc_votes: 1 };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(updateVotes)
+      .expect(200)
+      .then((response) => {
+        const comment = response.body.comment;
+        expect(comment.votes).toEqual(17);
+      });
+  });
+  test("should update the votes, negatively on the comment from the supplied comment id", () => {
+    const updateVotes = { inc_votes: -1 };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(updateVotes)
+      .expect(200)
+      .then((response) => {
+        const comment = response.body.comment;
+        expect(comment.votes).toEqual(15);
+      });
+  });
+  test("should return the whole comment upon completion", () => {
+    const updateVotes = { inc_votes: 1 };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(updateVotes)
+      .expect(200)
+      .then((response) => {
+        const comment = response.body.comment;
+        expect(comment).toEqual({
+          article_id: expect.any(Number),
+          comment_id: expect.any(Number),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+        });
+      });
+  });
+  test("should still respond with the comment if the votes are not incremented", () => {
+    const updateVotes = { inc_votes: 0 };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(updateVotes)
+      .expect(200)
+      .then((response) => {
+        const comment = response.body.comment;
+        expect(comment).toEqual({
+          article_id: expect.any(Number),
+          comment_id: expect.any(Number),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+        });
+      });
+  });
+  test("should respond with 404 when passed no id", () => {
+    return request(app).patch("/api/comments/").expect(404);
   });
 
+  test("should respond with 400 when passed an invalid ID", () => {
+    return request(app).patch("/api/comments/invalidId").expect(400);
+  });
+  test("should respond with 404 when passed an non existant ID", () => {
+    return request(app).patch("/api/comments/9999").expect(404);
+  });
 });
+
+//API ENDPOINT.JSON

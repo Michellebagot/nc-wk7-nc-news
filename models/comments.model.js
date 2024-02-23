@@ -31,9 +31,21 @@ exports.deleteFromComments = ({ comment_id }) => {
     });
 };
 
-exports.selectCommentByCommentId = ({comment_id}) => {
-  return db.query(`SELECT * FROM comments WHERE comment_id = $1`, [comment_id])
-  .then((result) => {
-    return result.rows
-  })
-}
+exports.selectCommentByCommentId = ({ comment_id }) => {
+  return db
+    .query(`SELECT * FROM comments WHERE comment_id = $1`, [comment_id])
+    .then((result) => {
+      return result.rows;
+    });
+};
+
+exports.updateVotesOnCommentByCommentId = ({ comment_id }, { inc_votes }) => {
+  return db
+    .query(
+      `UPDATE comments SET votes = votes + $2 WHERE comment_id = $1 RETURNING *;`,
+      [comment_id, inc_votes]
+    )
+    .then((result) => {
+      return result.rows[0];
+    });
+};

@@ -4,6 +4,7 @@ const {
   insertCommentToArticle,
   deleteFromComments,
   selectCommentByCommentId,
+  updateVotesOnCommentByCommentId,
 } = require("../models/comments.model");
 
 exports.getCommentsByArticleId = (request, response, next) => {
@@ -63,3 +64,23 @@ exports.deleteCommentByCommentId = (request, response, next) => {
       next(err);
     });
 };
+
+exports.patchCommentByCommentId = (request, response, next) => {
+
+  selectCommentByCommentId(request.params)
+  .then((result) => {
+    if (result.length !== 0) {
+      updateVotesOnCommentByCommentId(request.params, request.body).then((comment) => {
+        response.status(200).send({comment});
+      });
+    } else {
+      return Promise.reject({ status: 404, msg: "Not found" });
+    }
+  })
+  .catch((err) => {
+    next(err);
+  });
+
+};
+
+
