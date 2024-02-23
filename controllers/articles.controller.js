@@ -18,8 +18,10 @@ exports.getArticleById = (request, response, next) => {
 };
 
 exports.getArticles = (request, response, next) => {
-  const topicQuery = request.query.topic
-  selectAllArticles(topicQuery)
+  const topicQuery = request.query.topic;
+  const sortBy = request.query.sort_by;
+  const orderBy = request.query.order_by;
+  selectAllArticles(topicQuery, sortBy, orderBy)
     .then((articles) => {
       if (articles.length === 0) {
         return Promise.reject({ status: 404, msg: "Not found" });

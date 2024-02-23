@@ -93,7 +93,7 @@ describe("Task 4 - GET /api/articles/:article_id", () => {
         expect(response.body.msg).toBe("Not found");
       });
   });
-  test('Task 12 - should include comment count', () => {
+  test("Task 12 - should include comment count", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
@@ -108,7 +108,7 @@ describe("Task 4 - GET /api/articles/:article_id", () => {
           created_at: expect.any(String),
           votes: expect.any(Number),
           article_img_url: expect.any(String),
-          comment_count: expect.any(Number)
+          comment_count: expect.any(Number),
         });
       });
   });
@@ -472,4 +472,34 @@ describe("Task 11 - GET /api/articles (topic query)", () => {
         });
       });
   });
+});
+
+describe("Task 15 /api/articles - sorting queries ", () => {
+  test("should sort articles by any valid column, defaulting to a decending order", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSortedBy("article_id", {
+          descending: true,
+        });
+      });
+  });
+  test("should allow for the sort order to be ascending or decending", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title&order_by=asc")
+      .expect(200)
+      .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSortedBy("title", {
+          ascending: true,
+        });
+      });
+  });
+  test("should return 400 bad request if given an invalid sort_by column", () => {  //same 
+    return request(app)
+    .get("/api/articles?sort_by=invalid")
+    .expect(400)
+  })
 });
